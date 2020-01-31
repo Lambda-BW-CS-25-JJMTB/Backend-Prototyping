@@ -51,6 +51,24 @@ class Room():
         return f"Room: {self.name} - connected to {connectionCount} {roomsString}"
 
 
+class Rooms():
+    def __init__(self, roomLimit=100):
+        self.roomLimit = roomLimit
+        self.generateRooms()
+
+    def generateRooms(self):
+        self.rooms = set()
+        self.occupiedRooms = set()
+        self.emptyRooms = set()
+
+        entrance = Room("Spawn Area")
+        self.addRoom(entrance)
+
+    def addRoom(self, room):
+        self.rooms.add(room)
+        self.emptyRooms.add(room)
+
+
 room = Room("entrance", Position(1, 5))
 
 print(room)
