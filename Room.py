@@ -102,6 +102,70 @@ class Room():
         if room.east != self:
             room.connectEastTo(self)
 
+    def connectedInDirections(self):
+        connectedDirections = set()
+        if self.north:
+            connectedDirections.add(CardinalDirection.NORTH)
+        if self.south:
+            connectedDirections.add(CardinalDirection.SOUTH)
+        if self.east:
+            connectedDirections.add(CardinalDirection.EAST)
+        if self.west:
+            connectedDirections.add(CardinalDirection.WEST)
+        return connectedDirections
+
+    def visualizeTextCharacter(self):
+        connections = self.connectedInDirections()
+        if len(connections) == 4:
+            return "+"
+        elif len(connections) == 3:
+            # nes
+            if CardinalDirection.NORTH in connections and CardinalDirection.EAST in connections and CardinalDirection.SOUTH in connections:
+                return "+"
+            # new
+            elif CardinalDirection.NORTH in connections and CardinalDirection.EAST in connections and CardinalDirection.WEST in connections:
+                return "+"
+            # nws
+            elif CardinalDirection.NORTH in connections and CardinalDirection.SOUTH in connections and CardinalDirection.WEST in connections:
+                return "+"
+            # ews
+            else:
+                return "+"
+        elif len(connections) == 2:
+            # ne
+            if CardinalDirection.NORTH in connections and CardinalDirection.EAST in connections:
+                return "+"
+            # nw
+            elif CardinalDirection.NORTH in connections and CardinalDirection.WEST in connections:
+                return "+"
+            # ns
+            elif CardinalDirection.NORTH in connections and CardinalDirection.SOUTH in connections:
+                return "|"
+            # es
+            elif CardinalDirection.EAST in connections and CardinalDirection.SOUTH in connections:
+                return "r"
+            # ew
+            elif CardinalDirection.EAST in connections and CardinalDirection.WEST in connections:
+                return "-"
+            # sw
+            else:
+                return "+"
+        elif len(connections) == 1:
+            # n
+            if CardinalDirection.NORTH in connections:
+                return "⏝"
+            # s
+            elif CardinalDirection.SOUTH in connections:
+                return "⏜"
+            # w
+            elif CardinalDirection.WEST in connections:
+                return ")"
+            # e
+            else:
+                return "("
+        else:
+            return " "
+
     def __str__(self):
         connectedRooms = [self.north, self.south, self.east, self.west]
         connectionCount = len(connectedRooms)
@@ -116,11 +180,11 @@ class CardinalDirection(Enum):
     WEST = 3
 
 class RoomController():
-    def __init__(self, roomLimit=100):
+    def __init__(self, roomLimit=1000):
         self.roomLimit = roomLimit
         self.generateRooms()
 
-    def generateRooms(self, seed=None):
+    def generateRooms(self, seed=100):
         self.rooms = set()
         self.occupiedRooms = set()
         self.emptyRooms = set()
@@ -211,10 +275,10 @@ class RoomController():
         for room in self.rooms:
             xIndex = xRange + room.position.x
             yIndex = yRange + room.position.y
-            xTemplateArray[xIndex][yIndex] = "O" if room.position == Position.zero() else "X"
+            xTemplateArray[xIndex][yIndex] = "O" if room.position == Position.zero() else room.visualizeTextCharacter()
 
         outStr = ""
-        for yIndex in range(yRange2):
+        for yIndex in range(yRange2 - 1, 0, -1):
             for xIndex in range(xRange2):
                 outStr += xTemplateArray[xIndex][yIndex]
             outStr += "\n"
