@@ -1,6 +1,7 @@
 from enum import Enum
-# from Queue import Queue
+from Queue import Queue
 import math
+import random
 
 class Position():
     @staticmethod
@@ -119,14 +120,34 @@ class RoomController():
         self.roomLimit = roomLimit
         self.generateRooms()
 
-    def generateRooms(self):
+    def generateRooms(self, seed=None):
         self.rooms = set()
         self.occupiedRooms = set()
         self.emptyRooms = set()
         self.roomCoordinates = set()
+        random.seed(seed)
 
         self.spawnRoom = Room("Spawn Area")
         self.addRoomConnection(self.spawnRoom, None, None)
+
+        roomQueue = Queue()
+        roomQueue.enqueue(self.spawnRoom)
+
+        while len(self.rooms) < self.roomLimit:
+            if len(roomQueue) == 0:
+                print("Somehow there are no valid rooms in the queue")
+                return
+            oldRoom = roomQueue.dequeue()
+            newRoom = Room(f"Room {len(self.rooms)}")
+
+            possibleDirections = list(self.roomEligibleDirections(oldRoom))
+            if len(possibleDirections) > 0:
+                newDirection = random.choice(possibleDirections)
+                self.addRoomConnection(newRoom, oldRoom, newDirection)
+                if self.roomEligibleToAppend(newRoom):
+                    roomQueue.enqueue(newRoom)
+                if self.roomEligibleToAppend(oldRoom):
+                    roomQueue.enqueue(oldRoom)
 
     # must include an oldRoom and direction or the new room will sit abandoned and alone. Exception is made for initial room.
     def addRoomConnection(self, newRoom, oldRoom, direction):
