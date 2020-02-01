@@ -201,24 +201,21 @@ class RoomController():
 
         xRange = xValues[-1] - xValues[0]
         yRange = yValues[-1] - yValues[0]
+        xRange2 = xRange * 2
+        yRange2 = yRange * 2
 
-        yTemplateArray = [" "] * yRange * 2
-        # xTemplateArray = [yTemplateArray.copy()].copy() * xRange * 2
+        yTemplateArray = [" "] * yRange2
 
-        xTemplateArray = [yTemplateArray.copy() for i in range(xRange * 2)]
+        xTemplateArray = [yTemplateArray.copy() for i in range(xRange2)]
 
         for room in self.rooms:
             xIndex = xRange + room.position.x
             yIndex = yRange + room.position.y
-            xTemplateArray[xIndex][yIndex] = "o" if room.position == Position.zero() else "x"
-
-        # print("x: ", xValues, xRange)
-        # print("y: ", yValues, yRange)
-
+            xTemplateArray[xIndex][yIndex] = "O" if room.position == Position.zero() else "X"
 
         outStr = ""
-        for yIndex in range(yRange * 2):
-            for xIndex in range(xRange * 2):
+        for yIndex in range(yRange2):
+            for xIndex in range(xRange2):
                 outStr += xTemplateArray[xIndex][yIndex]
             outStr += "\n"
 
