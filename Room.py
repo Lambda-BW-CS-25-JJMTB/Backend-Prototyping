@@ -1,3 +1,6 @@
+from Queue import Queue
+import math
+
 class Position():
 
     def __init__(self, x, y):
@@ -7,6 +10,15 @@ class Position():
     @staticmethod
     def zero():
         return Position(0, 0)
+
+    def __distanceToNoRoot(self, toPosition):
+        return (self.x - toPosition.x) * (self.x - toPosition.x) + (self.y - toPosition.y) * (self.y - toPosition.y)
+
+    def distanceTo(self, toPosition):
+        return math.sqrt(self.__distanceToNoRoot(toPosition))
+
+    def distanceIsGreaterThan(self, toPosition, comparedValue):
+        return self.__distanceToNoRoot(toPosition) > (comparedValue * comparedValue)
 
 class Player():
     def __init__(self):
