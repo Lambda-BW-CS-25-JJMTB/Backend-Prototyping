@@ -117,12 +117,19 @@ class RoomTests(unittest.TestCase):
         self.assertEqual(controller.canAddRoomAt(Position(-1, 0)), True)
         self.assertEqual(controller.canAddRoomAt(Position(0, 0)), False)
 
+        spawn = controller.spawnRoom
         a, b, c = self.rooms()
-        controller.addRoomConnection(a, controller.spawnRoom, CardinalDirection.NORTH)
+        d, e, f = self.rooms()
+        controller.addRoomConnection(a, spawn, CardinalDirection.NORTH)
         controller.addRoomConnection(b, a, CardinalDirection.EAST)
         self.assertEqual(controller.canAddRoomAt(Position(1, 0)), False)
         self.assertEqual(controller.canAddRoomAt(Position(2, 1)), True)
 
+        self.assertEqual(controller.roomEligibleToAppend(spawn), True)
+        
+        controller.addRoomConnection(c, spawn, CardinalDirection.WEST)
+        controller.addRoomConnection(d, c, CardinalDirection.SOUTH)
+        self.assertEqual(controller.roomEligibleToAppend(spawn), False)
 
 if __name__ == '__main__':
     unittest.main()

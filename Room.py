@@ -156,5 +156,18 @@ class RoomController():
         else:
             return False
 
-    # def roomCanAppend()
+    def roomEligibleDirections(self, room):
+        n, s, e, w = room.position.nsewOne()
+        eligibleDirections = set()
+        if self.canAddRoomAt(n):
+            eligibleDirections.add(CardinalDirection.NORTH)
+        if self.canAddRoomAt(s):
+            eligibleDirections.add(CardinalDirection.SOUTH)
+        if self.canAddRoomAt(e):
+            eligibleDirections.add(CardinalDirection.EAST)
+        if self.canAddRoomAt(w):
+            eligibleDirections.add(CardinalDirection.WEST)
+        return eligibleDirections
 
+    def roomEligibleToAppend(self, room):
+        return len(self.roomEligibleDirections(room)) > 0
