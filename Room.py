@@ -1,4 +1,5 @@
-from Queue import Queue
+from enum import Enum
+# from Queue import Queue
 import math
 
 class Position():
@@ -107,7 +108,13 @@ class Room():
         return f"Room: {self.name} - connected to {connectionCount} {roomsString}"
 
 
-class Rooms():
+class CardinalDirection(Enum):
+    NORTH = 0
+    SOUTH = 1
+    EAST = 2
+    WEST = 3
+
+class RoomController():
     def __init__(self, roomLimit=100):
         self.roomLimit = roomLimit
         self.generateRooms()
@@ -116,15 +123,38 @@ class Rooms():
         self.rooms = set()
         self.occupiedRooms = set()
         self.emptyRooms = set()
+        self.roomCoordinates = set()
 
-        entrance = Room("Spawn Area")
-        self.addRoom(entrance)
+        self.spawnRoom = Room("Spawn Area")
+        self.addRoomConnection(self.spawnRoom, None, None)
 
-    def addRoom(self, room):
-        self.rooms.add(room)
-        self.emptyRooms.add(room)
+    # must include an oldRoom and direction or the new room will sit abandoned and alone. Exception is made for initial room.
+    def addRoomConnection(self, newRoom, oldRoom, direction):
+        if oldRoom and direction:
+            if direction == CardinalDirection.NORTH:
+                oldRoom.connectNorthTo(newRoom)
+            elif direction == CardinalDirection.EAST:
+                oldRoom.connectEastTo(newRoom)
+            elif direction == CardinalDirection.SOUTH:
+                oldRoom.connectSouthTo(newRoom)
+            elif direction == CardinalDirection.WEST:
+                oldRoom.connectWestTo(newRoom)
+            else:
+                # something went wrong
+                return
+        self.rooms.add(newRoom)
+        self.emptyRooms.add(newRoom)
+        self.roomCoordinates.add(newRoom.position)
 
+    # checks to see how many NSEW neighbors a new room would potentially have. returns true if the neighbor count is 1
+    def canAddRoomAt(self, position):
+        nswe = [pos for pos in (position.nsewOne())]
 
-room = Room("entrance", Position(1, 5))
+        count = len([direction for direction in nswe if direction in self.roomCoordinates])
+        if count == 1:
+            return True
+        else:
+            return False
 
-print(room)
+    # def roomCanAppend()
+

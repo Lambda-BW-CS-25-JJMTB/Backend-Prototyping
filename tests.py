@@ -1,5 +1,5 @@
 import unittest
-from Room import Room, Position, Player, Rooms
+from Room import Room, Position, Player, RoomController, CardinalDirection
 
 
 class RoomTests(unittest.TestCase):
@@ -108,6 +108,20 @@ class RoomTests(unittest.TestCase):
         self.assertEqual(e.position, Position(-2, 0))
         self.assertEqual(f.position, Position(-2, 1))
 
+    def testRoomController(self):
+        controller = RoomController()
+
+        self.assertEqual(controller.canAddRoomAt(Position(0, 1)), True)
+        self.assertEqual(controller.canAddRoomAt(Position(0, -1)), True)
+        self.assertEqual(controller.canAddRoomAt(Position(1, 0)), True)
+        self.assertEqual(controller.canAddRoomAt(Position(-1, 0)), True)
+        self.assertEqual(controller.canAddRoomAt(Position(0, 0)), False)
+
+        a, b, c = self.rooms()
+        controller.addRoomConnection(a, controller.spawnRoom, CardinalDirection.NORTH)
+        controller.addRoomConnection(b, a, CardinalDirection.EAST)
+        self.assertEqual(controller.canAddRoomAt(Position(1, 0)), False)
+        self.assertEqual(controller.canAddRoomAt(Position(2, 1)), True)
 
 
 if __name__ == '__main__':
