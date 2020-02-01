@@ -24,6 +24,12 @@ class RoomTests(unittest.TestCase):
         gtTest = zPos.distanceIsGreaterThan(position, 40)
         self.assertEqual(gtTest, False)
 
+        otherPos = Position(0, 0)
+
+        self.assertEqual(position == otherPos, False)
+        self.assertEqual(position != otherPos, True)
+        self.assertEqual(otherPos == zPos, True)
+        self.assertEqual(otherPos != zPos, False)
 
 if __name__ == '__main__':
     unittest.main()

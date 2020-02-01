@@ -2,14 +2,35 @@ from Queue import Queue
 import math
 
 class Position():
+    @staticmethod
+    def zero():
+        return Position(0, 0)
 
     def __init__(self, x, y):
         self.x = x
         self.y = y
 
-    @staticmethod
-    def zero():
-        return Position(0, 0)
+    def __add__(self, other):
+        return Position(self.x + other.x, self.y + other.y)
+
+    def __sub__(self, other):
+        return Position(self.x - other.x, self.y - other.y)
+
+    def __mul__(self, other):
+        return Position(self.x * other.x, self.y * other.y)
+
+    def __truediv__(self, other):
+        return Position(self.x / other.x, self.y / other.y)
+
+    def __floordiv__(self, other):
+        return Position(self.x // other.x, self.y // other.y)
+
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
+
+    def __ne__(self, other):
+        return not (self == other)
+
 
     def __distanceToNoRoot(self, toPosition):
         return (self.x - toPosition.x) * (self.x - toPosition.x) + (self.y - toPosition.y) * (self.y - toPosition.y)
