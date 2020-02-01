@@ -31,5 +31,70 @@ class RoomTests(unittest.TestCase):
         self.assertEqual(otherPos == zPos, True)
         self.assertEqual(otherPos != zPos, False)
 
+    def rooms(self):
+        roomA = Room("Room A")
+        roomB = Room("Room B")
+        roomC = Room("Room C")
+        return (roomA, roomB, roomC)
+
+    def testRoomConnections(self):
+        a, b, c = self.rooms()
+
+        a.connectEastTo(b)
+        b.connectEastTo(c)
+
+        self.assertEqual(a.position, Position(0, 0))
+        self.assertEqual(b.position, Position(1, 0))
+        self.assertEqual(c.position, Position(2, 0))
+
+        # reset
+        a, b, c = self.rooms()
+
+        a.connectNorthTo(b)
+        b.connectNorthTo(c)
+
+        self.assertEqual(a.position, Position(0, 0))
+        self.assertEqual(b.position, Position(0, 1))
+        self.assertEqual(c.position, Position(0, 2))
+
+        # reset
+        a, b, c = self.rooms()
+
+        a.connectSouthTo(b)
+        b.connectSouthTo(c)
+
+        self.assertEqual(a.position, Position(0, 0))
+        self.assertEqual(b.position, Position(0, -1))
+        self.assertEqual(c.position, Position(0, -2))
+
+        # reset
+        a, b, c = self.rooms()
+
+        a.connectWestTo(b)
+        b.connectWestTo(c)
+
+        self.assertEqual(a.position, Position(0, 0))
+        self.assertEqual(b.position, Position(-1, 0))
+        self.assertEqual(c.position, Position(-2, 0))
+
+        # reset
+        a, b, c = self.rooms()
+        d, e, f = self.rooms()
+
+        a.connectNorthTo(b)
+        b.connectWestTo(c)
+        c.connectSouthTo(d)
+        d.connectWestTo(e)
+        e.connectNorthTo(f)
+
+        self.assertEqual(a.position, Position(0, 0))
+        self.assertEqual(b.position, Position(0, 1))
+        self.assertEqual(c.position, Position(-1, 1))
+        self.assertEqual(d.position, Position(-1, 0))
+        self.assertEqual(e.position, Position(-2, 0))
+        self.assertEqual(f.position, Position(-2, 1))
+
+
+
 if __name__ == '__main__':
     unittest.main()

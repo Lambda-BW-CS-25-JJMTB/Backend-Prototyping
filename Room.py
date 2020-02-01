@@ -59,21 +59,29 @@ class Room():
 
     def connectNorthTo(self, room):
         self.north = room
+        relativePosition = Position(0, 1)
+        self.north.position = self.position + relativePosition
         if room.south != self:
             room.connectSouthTo(self)
 
     def connectSouthTo(self, room):
         self.south = room
+        relativePosition = Position(0, -1)
+        self.south.position = self.position + relativePosition
         if room.north != self:
             room.connectNorthTo(self)
 
     def connectEastTo(self, room):
         self.east = room
+        relativePosition = Position(1, 0)
+        self.east.position = self.position + relativePosition
         if room.west != self:
             room.connectWestTo(self)
 
     def connectWestTo(self, room):
         self.west = room
+        relativePosition = Position(-1, 0)
+        self.west.position = self.position + relativePosition
         if room.east != self:
             room.connectEastTo(self)
 
