@@ -111,12 +111,14 @@ class RoomTests(unittest.TestCase):
     def testRoomController(self):
         controller = RoomController()
 
+        # adding rooms
         self.assertEqual(controller.canAddRoomAt(Position(0, 1)), True)
         self.assertEqual(controller.canAddRoomAt(Position(0, -1)), True)
         self.assertEqual(controller.canAddRoomAt(Position(1, 0)), True)
         self.assertEqual(controller.canAddRoomAt(Position(-1, 0)), True)
         self.assertEqual(controller.canAddRoomAt(Position(0, 0)), False)
 
+        # add room confirmation booleans
         spawn = controller.spawnRoom
         a, b, c = self.rooms()
         d, e, f = self.rooms()
@@ -130,6 +132,10 @@ class RoomTests(unittest.TestCase):
         controller.addRoomConnection(c, spawn, CardinalDirection.WEST)
         controller.addRoomConnection(d, c, CardinalDirection.SOUTH)
         self.assertEqual(controller.roomEligibleToAppend(spawn), False)
+
+        # add room eligible directions
+        self.assertEqual(controller.roomEligibleDirections(b), set([CardinalDirection.NORTH, CardinalDirection.EAST]))
+        self.assertEqual(controller.roomEligibleDirections(d), set([CardinalDirection.SOUTH, CardinalDirection.WEST]))
 
 if __name__ == '__main__':
     unittest.main()
