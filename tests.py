@@ -31,6 +31,20 @@ class RoomTests(unittest.TestCase):
         self.assertEqual(otherPos == zPos, True)
         self.assertEqual(otherPos != zPos, False)
 
+        n, s, e, w = zPos.nsewOne()
+        self.assertEqual(n, Position(0, 1))
+        self.assertEqual(s, Position(0, -1))
+        self.assertEqual(e, Position(1, 0))
+        self.assertEqual(w, Position(-1, 0))
+
+    def testPositionInSet(self):
+        mySet = set([Position.zero(), Position(0, 1)])
+        self.assertEqual(len(mySet), 2)
+        mySet.add(Position.zero())
+        self.assertEqual(len(mySet), 2)
+
+        self.assertEqual(Position.zero() in mySet, True)
+
     def rooms(self):
         roomA = Room("Room A")
         roomB = Room("Room B")
