@@ -192,3 +192,38 @@ class RoomController():
 
     def roomEligibleToAppend(self, room):
         return len(self.roomEligibleDirections(room)) > 0
+
+    def textVisualization(self):
+        xValueSet = {room.position.x for room in self.rooms}
+        yValueSet = {room.position.y for room in self.rooms}
+        xValues = sorted(list(xValueSet))
+        yValues = sorted(list(yValueSet))
+
+        xRange = xValues[-1] - xValues[0]
+        yRange = yValues[-1] - yValues[0]
+
+        yTemplateArray = [" "] * yRange * 2
+        # xTemplateArray = [yTemplateArray.copy()].copy() * xRange * 2
+
+        xTemplateArray = [yTemplateArray.copy() for i in range(xRange * 2)]
+
+        for room in self.rooms:
+            xIndex = xRange + room.position.x
+            yIndex = yRange + room.position.y
+            xTemplateArray[xIndex][yIndex] = "o" if room.position == Position.zero() else "x"
+
+        # print("x: ", xValues, xRange)
+        # print("y: ", yValues, yRange)
+
+
+        outStr = ""
+        for yIndex in range(yRange * 2):
+            for xIndex in range(xRange * 2):
+                outStr += xTemplateArray[xIndex][yIndex]
+            outStr += "\n"
+
+        print(outStr)
+
+
+roomController = RoomController()
+roomController.textVisualization()
