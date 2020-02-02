@@ -2,6 +2,8 @@ from enum import Enum
 from Queue import Queue
 import math
 import random
+import json
+import uuid
 
 class Position():
     @staticmethod
@@ -58,6 +60,9 @@ class Position():
     def __hash__(self):
         return hash(repr(self))
 
+    def toDict(self):
+        return {"x": self.x, "y": self.y}
+
 class Player():
     def __init__(self):
         self.room = None
@@ -73,6 +78,23 @@ class Room():
         self.west = west
         self.players = set()
         self.itemReward = None
+        self.id = uuid.uuid4().hex
+
+    def toDict(self):
+        newDict = {}
+        newDict["name"] = self.name
+        newDict["position"] = self.position.toDict()
+        newDict["id"] = self.id
+        if self.north:
+            newDict["north"] = self.north.id
+        if self.south:
+            newDict["south"] = self.south.id
+        if self.west:
+            newDict["west"] = self.west.id
+        if self.east:
+            newDict["east"] = self.east.id
+        newDict["itemReward"] = self.itemReward
+        return newDict
 
     def connectNorthTo(self, room):
         self.north = room
@@ -183,6 +205,13 @@ class RoomController():
     def __init__(self, roomLimit=1000):
         self.roomLimit = roomLimit
         self.generateRooms()
+
+    def toDict(self):
+        newDict = {}
+        newDict["rooms"] = [room.toDict() for room in self.rooms]
+        newDict["roomCoordinates"] = [pos.toDict() for pos in self.roomCoordinates]
+        newDict["spawnRoom"] = self.spawnRoom.id
+        return newDict
 
     def generateRooms(self, seed=100):
         self.rooms = set()
