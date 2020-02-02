@@ -201,6 +201,12 @@ class CardinalDirection(Enum):
     EAST = 2
     WEST = 3
 
+    def __lt__(self, other):
+        return self.value < other.value
+
+    def __gt__(self, other):
+        return self.value > other.value
+
 class RoomController():
     def __init__(self, roomLimit=1000):
         self.roomLimit = roomLimit
@@ -234,6 +240,7 @@ class RoomController():
             newRoom = Room(f"Room {len(self.rooms)}")
 
             possibleDirections = list(self.roomEligibleDirections(oldRoom))
+            possibleDirections.sort()
             if len(possibleDirections) > 0:
                 newDirection = random.choice(possibleDirections)
                 self.addRoomConnection(newRoom, oldRoom, newDirection)
