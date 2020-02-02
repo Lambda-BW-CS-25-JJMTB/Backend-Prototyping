@@ -301,22 +301,22 @@ class RoomController():
         yValues = sorted(list(yValueSet))
 
         xRange = xValues[-1] - xValues[0]
+        xOffset = 0 - xValues[0]
         yRange = yValues[-1] - yValues[0]
-        xRange2 = xRange * 2
-        yRange2 = yRange * 2
+        yOffset = 0 - yValues[0]
 
-        yTemplateArray = [" "] * yRange2
+        yTemplateArray = [" "] * (yRange + 1)
 
-        xTemplateArray = [yTemplateArray.copy() for i in range(xRange2)]
+        xTemplateArray = [yTemplateArray.copy() for i in range(xRange + 1)]
 
         for room in self.rooms:
-            xIndex = xRange + room.position.x
-            yIndex = yRange + room.position.y
+            xIndex = xOffset + room.position.x
+            yIndex = yOffset + room.position.y
             xTemplateArray[xIndex][yIndex] = "O" if room.position == Position.zero() else room.visualizeTextCharacter()
 
         outStr = ""
-        for yIndex in range(yRange2 - 1, 0, -1):
-            for xIndex in range(xRange2):
+        for yIndex in range(yRange - 1, 0, -1):
+            for xIndex in range(xRange):
                 outStr += xTemplateArray[xIndex][yIndex]
             outStr += "\n"
 
