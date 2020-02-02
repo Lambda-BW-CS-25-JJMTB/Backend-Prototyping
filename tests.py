@@ -1,5 +1,8 @@
 import unittest
-from Room import Room, Position, Player, RoomController, CardinalDirection
+from RoomController import RoomController
+from Room import Room
+from Position import Position
+from CardinalDirection import CardinalDirection
 import json
 
 
@@ -130,7 +133,7 @@ class RoomTests(unittest.TestCase):
         self.assertEqual(controller.canAddRoomAt(Position(2, 1)), True)
 
         self.assertEqual(controller.roomEligibleToAppend(spawn), True)
-        
+
         controller.addRoomConnection(c, spawn, CardinalDirection.WEST)
         controller.addRoomConnection(d, c, CardinalDirection.SOUTH)
         self.assertEqual(controller.roomEligibleToAppend(spawn), False)

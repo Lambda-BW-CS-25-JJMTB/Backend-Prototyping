@@ -184,3 +184,9 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.gitignore.io/api/code,linux,macos,python,windows
+
+rooms10.json
+
+rooms500.json
+
+rooms100.json
