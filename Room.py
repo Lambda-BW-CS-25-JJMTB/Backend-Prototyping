@@ -61,8 +61,8 @@ class Position():
     def __hash__(self):
         return hash(repr(self))
 
-    def toDict(self):
-        return {"x": self.x, "y": self.y}
+    def toArray(self):
+        return [self.x, self.y]
 
 class Player():
     def __init__(self):
@@ -84,7 +84,7 @@ class Room():
     def toDict(self):
         newDict = {}
         newDict["name"] = self.name
-        newDict["position"] = self.position.toDict()
+        newDict["position"] = self.position.toArray()
         newDict["id"] = self.id
         if self.north:
             newDict["north"] = self.north.id
@@ -209,14 +209,17 @@ class CardinalDirection(Enum):
         return self.value > other.value
 
 class RoomController():
-    def __init__(self, roomLimit=1000):
+    def __init__(self, roomLimit=100):
         self.roomLimit = roomLimit
         self.generateRooms()
 
     def toDict(self):
         newDict = {}
-        newDict["rooms"] = [room.toDict() for room in self.rooms]
-        newDict["roomCoordinates"] = [pos.toDict() for pos in self.roomCoordinates]
+        roomDict = {}
+        for room in self.rooms:
+            roomDict[room.id] = room.toDict()
+        newDict["rooms"] = roomDict
+        newDict["roomCoordinates"] = [pos.toArray() for pos in self.roomCoordinates]
         newDict["spawnRoom"] = self.spawnRoom.id
         return newDict
 
