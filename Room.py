@@ -4,6 +4,7 @@ import math
 import random
 import json
 import uuid
+import time
 
 class Position():
     @staticmethod
@@ -219,7 +220,7 @@ class RoomController():
         newDict["spawnRoom"] = self.spawnRoom.id
         return newDict
 
-    def generateRooms(self, seed=100):
+    def generateRooms(self, seed=time.time()):
         self.rooms = set()
         self.occupiedRooms = set()
         self.emptyRooms = set()
