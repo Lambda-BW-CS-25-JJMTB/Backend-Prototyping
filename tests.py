@@ -1,5 +1,6 @@
 import unittest
 from Room import Room, Position, Player, RoomController, CardinalDirection
+import json
 
 
 class RoomTests(unittest.TestCase):
@@ -110,6 +111,7 @@ class RoomTests(unittest.TestCase):
 
     def testRoomController(self):
         controller = RoomController()
+        controller.resetAllRooms()
 
         # adding rooms
         self.assertEqual(controller.canAddRoomAt(Position(0, 1)), True)
@@ -136,6 +138,27 @@ class RoomTests(unittest.TestCase):
         # add room eligible directions
         self.assertEqual(controller.roomEligibleDirections(b), set([CardinalDirection.NORTH, CardinalDirection.EAST]))
         self.assertEqual(controller.roomEligibleDirections(d), set([CardinalDirection.SOUTH, CardinalDirection.WEST]))
+
+    def testGenerateQuickTestJSON(self):
+        roomController = RoomController(10)
+        file_write = open("rooms10.json", "w")
+        json.dump(roomController.toDict(), file_write, indent=2)
+        file_write.close()
+
+        roomController = RoomController(100)
+        file_write = open("rooms100.json", "w")
+        json.dump(roomController.toDict(), file_write)
+        file_write.close()
+
+        roomController.textVisualization()
+
+        roomController = RoomController(500)
+        file_write = open("rooms500.json", "w")
+        json.dump(roomController.toDict(), file_write)
+        file_write.close()
+
+        # print(roomController.toDict())
+
 
 if __name__ == '__main__':
     unittest.main()

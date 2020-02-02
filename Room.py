@@ -2,7 +2,6 @@ from enum import Enum
 from Queue import Queue
 import math
 import random
-import json
 import uuid
 import time
 
@@ -223,15 +222,18 @@ class RoomController():
         newDict["spawnRoom"] = self.spawnRoom.id
         return newDict
 
-    def generateRooms(self, seed=time.time()):
+    def resetAllRooms(self):
         self.rooms = set()
         self.occupiedRooms = set()
         self.emptyRooms = set()
         self.roomCoordinates = set()
-        random.seed(seed)
 
         self.spawnRoom = Room("Spawn Area")
         self.addRoomConnection(self.spawnRoom, None, None)
+
+    def generateRooms(self, seed=time.time()):
+        self.resetAllRooms()
+        random.seed(seed)
 
         roomQueue = Queue()
         roomQueue.enqueue(self.spawnRoom)
@@ -325,6 +327,3 @@ class RoomController():
 
         print(outStr)
 
-
-roomController = RoomController()
-roomController.textVisualization()
